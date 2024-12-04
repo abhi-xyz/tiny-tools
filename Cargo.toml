@@ -3,6 +3,19 @@ name = "tiny-tools"
 version = "0.1.0"
 edition = "2021"
 
+# license = "MIT"
+authors = ["Abhinandh S <abhinandhsuby@proton.me>"]
+categories = ["macros"]
+description = "a tiny collection of helper utils"
+homepage = "https://github.com/abhi-xyz/tiny-tools"
+repository = "https://github.com/abhi-xyz/tiny-tools"
+keywords = ["macro", "tool", "utility"]
+# readme = "README.md"
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+
 [features]
 default = []
 debug = []
