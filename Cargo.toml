@@ -9,7 +9,7 @@ categories = ["macros"]
 description = "a tiny collection of helper utils"
 homepage = "https://github.com/abhi-xyz/tiny-tools"
 repository = "https://github.com/abhi-xyz/tiny-tools"
-keywords = ["other", "utilities"]
+keywords = ["development-tools"]
 # readme = "README.md"
 
 [badges]
