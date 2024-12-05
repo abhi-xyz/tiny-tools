@@ -50,7 +50,7 @@ macro_rules! dev_debug {
 #[macro_export]
 macro_rules! show_error(
     ($($args:tt)+) => ({
-        eprint!("roxide: ");
+        eprint!("{}: ", env!("CARGO_PKG_NAME"));
         eprintln!($($args)+);
     })
 );
