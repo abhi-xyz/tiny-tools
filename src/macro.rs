@@ -10,6 +10,20 @@ macro_rules! dprintln {
     ($($arg:tt)*) => {};
 }
 
+#[macro_export]
+#[cfg(feature = "debug")]
+macro_rules! dprint {
+    ($($arg:tt)*) => (print!($($arg)*));
+}
+
+#[macro_export]
+#[cfg(not(feature = "debug"))]
+macro_rules! dprint {
+    ($($arg:tt)*) => {};
+}
+
+
+
 /// # verbose
 #[macro_export]
 macro_rules! verbose {
