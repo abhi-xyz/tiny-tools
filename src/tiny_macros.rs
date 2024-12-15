@@ -1,3 +1,62 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Log<F, L> {
+    pub file: F,      // Source file where the log is generated
+    pub line: L,      // Line number where the log is generated
+    pub time: String, // Timestamp for the log entry
+    pub msg: String,  // Log message
+}
+
+// Macro to create and write log entries
+#[macro_export]
+macro_rules! json_logger {
+    ($msg:expr) => {{
+        use chrono::Local;
+        use std::fs::OpenOptions;
+        use std::io::Write;
+
+        // Get the current timestamp
+        let timestamp = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
+
+        // Create a log entry
+        let log_entry = $crate::tiny_macros::Log {
+            file: file!(),
+            line: line!(),
+            time: timestamp,
+            msg: $msg.to_string(),
+        };
+
+        // Serialize the log entry to JSON
+        let json_log = serde_json::to_string_pretty(&log_entry).unwrap();
+
+        let bin_name = env!("CARGO_PKG_NAME");
+        let log_dir = dirs::cache_dir()
+            .unwrap_or(dirs::data_dir().unwrap())
+            .join(bin_name);
+        if !log_dir.exists() {
+            std::fs::create_dir_all(&log_dir).unwrap();
+        }
+        let log_file = &log_dir.join("log.json");
+        if !log_file.exists() {
+            std::fs::write(log_file, "").unwrap();
+        }
+
+        // Define the log file path
+        let log_file_path = log_file; // Customize the log file path as needed
+
+        // Open the log file in append mode
+        let mut file = OpenOptions::new()
+            .create(true) // Create the file if it doesn't exist
+            .append(true) // Append to the file if it exists
+            .open(log_file_path)
+            .unwrap(); // Handle errors appropriately
+
+        // Write the JSON-formatted log entry to the file
+        writeln!(file, "{}", json_log).unwrap(); // Handle errors appropriately
+    }};
+}
+
 #[macro_export]
 #[cfg(feature = "debug")]
 macro_rules! dprintln {
@@ -99,4 +158,3 @@ macro_rules! prompt_yes {
         matches!(input.trim().to_lowercase().as_str(), "yes" | "y")
     }};
 }
-
